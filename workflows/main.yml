@@ -1,0 +1,49 @@
+# name: FastAPI Docker Deploy to NCP
+
+# on:
+#   push:
+#     branches:
+#       - main  # main 브랜치에 push될 때 실행
+
+# jobs:
+#   deploy:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#       - name: Checkout Repository
+#         uses: actions/checkout@v3  # GitHub 레포지토리 코드 가져오기
+
+#       - name: Configure Docker Daemon (Allow HTTP Registry)
+#         run: |
+#           echo '{ "insecure-registries": ["${{ secrets.JARVIS_DOMAIN }}:5000"] }' | sudo tee /etc/docker/daemon.json
+#           sudo systemctl restart docker
+
+#       - name: Login to Private Registry
+#         run: |
+#           echo "${{ secrets.NCP_REGISTRY_PASSWORD }}" | docker login ${{ secrets.JARVIS_DOMAIN }}:5000 \
+#             -u ${{ secrets.NCP_REGISTRY_USER }} --password-stdin
+
+#       - name: Build Docker Image
+#         run: |
+#           docker build -t ${{ secrets.JARVIS_DOMAIN }}:5000/jarvis-ai .
+
+#       - name: Push Docker Image to Private Registry
+#         run: |
+#           docker push ${{ secrets.JARVIS_DOMAIN }}:5000/jarvis-ai
+
+#       - name: Deploy to NCP Server (Password Authentication)
+#         uses: appleboy/ssh-action@master
+#         with:
+#           host: ${{ secrets.NCP_SERVER_IP }}
+#           username: root
+#           password: ${{ secrets.NCP_SSH_PASSWORD }}
+#           script: |
+#             echo '{ "insecure-registries": ["${{ secrets.JARVIS_DOMAIN }}:5000"] }' | sudo tee /etc/docker/daemon.json
+#             sudo systemctl restart docker
+#             echo "${{ secrets.NCP_REGISTRY_PASSWORD }}" | docker login ${{ secrets.JARVIS_DOMAIN }}:5000 \
+#               -u ${{ secrets.NCP_REGISTRY_USER }} --password-stdin
+#             docker pull ${{ secrets.JARVIS_DOMAIN }}:5000/jarvis-ai
+#             docker stop jarvis-ai-container || true
+#             docker rm jarvis-ai-container || true
+#             docker run -d --name jarvis-ai-container --restart=always -p 9000:9000 \
+#               ${{ secrets.JARVIS_DOMAIN }}:5000/jarvis-ai

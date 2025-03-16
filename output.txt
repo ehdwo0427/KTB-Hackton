@@ -1,0 +1,41 @@
+import numpy as np
+
+
+def and_perceptron(x1, x2):
+    """
+    AND 게이트를 퍼셉트론으로 구현합니다.
+
+    Args:
+        x1 (int): 입력 1 (0 또는 1)
+        x2 (int): 입력 2 (0 또는 1)
+
+    Returns:
+        int: AND 연산 결과 (0 또는 1)
+    """
+    # 가중치와 임계값 설정
+    w1, w2, theta = 0.5, 0.5, 0.7
+
+    # numpy 배열로 변환하여 내적 계산
+    x = np.array([x1, x2])
+    w = np.array([w1, w2])
+
+    # 퍼셉트론 출력 계산
+    tmp = np.sum(w * x)
+    if tmp <= theta:
+        return 0
+    elif tmp > theta:
+        return 1
+
+
+# AND 게이트 진리표 테스트
+print(f"0 AND 0: {and_perceptron(0, 0)}")  # Expected output: 0
+print(f"0 AND 1: {and_perceptron(0, 1)}")  # Expected output: 0
+print(f"1 AND 0: {and_perceptron(1, 0)}")  # Expected output: 0
+print(f"1 AND 1: {and_perceptron(1, 1)}")  # Expected output: 1
+
+# 추가 예시: 다른 가중치/임계값 사용
+# w1, w2, theta = 0.4, 0.6, 0.8
+# print(f"0 AND 0 (Different weights/threshold): {and_perceptron(0, 0)}")
+# print(f"0 AND 1 (Different weights/threshold): {and_perceptron(0, 1)}")
+# print(f"1 AND 0 (Different weights/threshold): {and_perceptron(1, 0)}")
+# print(f"1 AND 1 (Different weights/threshold): {and_perceptron(1, 1)}")

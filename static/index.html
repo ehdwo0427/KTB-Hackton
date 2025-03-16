@@ -1,0 +1,20 @@
+<html>
+  <body>
+    <div id="sse"></div>
+    <script>
+      const eventSource = new EventSource('/says?text=explain quantum computing');
+      const sseDataElement = document.getElementById('sse');
+      
+      eventSource.onmessage = (event) => {
+        console.log('New message:', event.data);
+        sseDataElement.innerHTML += event.data;
+      };
+      
+      eventSource.onerror = (error) => {
+        console.error('Error:', error);
+        sseDataElement.innerHTML += '<br/>Done!';
+        eventSource.close();
+      };    
+    </script>
+    </body>  
+</html>

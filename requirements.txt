@@ -1,0 +1,13 @@
+fastapi
+uvicorn
+google-generativeai
+langchain
+langchain-community
+langchain-google-genai
+python-dotenv
+# psycopg2
+# mariadb
+faiss-cpu
+sentence-transformers
+requests
+# tensorflow_datasets
